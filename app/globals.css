@@ -65,7 +65,7 @@ ul {
 }
 
 #home {
-  margin: 3rem auto;
+  margin: 2rem auto;
   max-width: 50rem;
   text-align: center;
 }
@@ -77,12 +77,12 @@ ul {
 }
 
 #home h1 {
-  margin-top: 3rem;
+  margin-top: 2rem;
   font-size: 2.5rem;
 }
 
 #home p {
-  margin: 2rem 0;
+  margin: 1rem 0;
   color: #bcbcb7;
   font-size: 1.1rem;
 }
@@ -95,7 +95,7 @@ ul {
   border-radius: 4px;
   text-decoration: none;
   font-weight: bold;
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 #home a:hover {
