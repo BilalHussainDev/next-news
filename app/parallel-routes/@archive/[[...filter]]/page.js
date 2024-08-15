@@ -26,8 +26,17 @@ export default function filteredNewsPage({ params }) {
     links = [];
   }
 
+  if (
+    (selectedYear && !getAvailableNewsYears().includes(+selectedYear)) ||
+    (selectedMonth &&
+      !getAvailableNewsMonths(selectedYear).includes(+selectedMonth))
+  ) {
+    throw new Error('Invalid path');
+  }
+
   return (
     <>
+      <h2>Archieve News</h2>
       <header id="archive-header">
         <nav>
           <ul>
