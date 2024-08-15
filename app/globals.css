@@ -149,6 +149,10 @@ ul {
   border-radius: 4px;
 }
 
+.fullscreen-image img {
+  width: 100%;
+}
+
 .modal {
   background-color: #bababa;
   padding: 2rem;
