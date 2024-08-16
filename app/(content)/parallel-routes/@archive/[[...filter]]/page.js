@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import NewsList from "@/components/news-list";
 import {
   getAvailableNewsMonths,
@@ -7,7 +8,7 @@ import {
   getNewsForYearAndMonth,
 } from "@/lib/news";
 
-export default function filteredNewsPage({ params }) {
+export default async function filteredNewsPage({ params }) {
   const filter = params.filter;
 
   const selectedYear = filter?.[0];
@@ -17,19 +18,19 @@ export default function filteredNewsPage({ params }) {
   let links = getAvailableNewsYears();
 
   if (selectedYear && !selectedMonth) {
-    news = getNewsForYear(selectedYear);
+    news = await getNewsForYear(selectedYear);
     links = getAvailableNewsMonths(selectedYear);
   }
 
   if (selectedYear && selectedMonth) {
-    news = getNewsForYearAndMonth(selectedYear, selectedMonth);
+    news = await getNewsForYearAndMonth(selectedYear, selectedMonth);
     links = [];
   }
 
   if (
-    (selectedYear && !getAvailableNewsYears().includes(+selectedYear)) ||
+    (selectedYear && !getAvailableNewsYears().includes(selectedYear)) ||
     (selectedMonth &&
-      !getAvailableNewsMonths(selectedYear).includes(+selectedMonth))
+      !getAvailableNewsMonths(selectedYear).includes(selectedMonth))
   ) {
     throw new Error('Invalid path');
   }
