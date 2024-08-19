@@ -7,6 +7,25 @@ import {
   getNewsForYear,
   getNewsForYearAndMonth,
 } from "@/lib/news";
+import { Suspense } from "react";
+
+async function FilteredNews({ year, month }) {
+  let news;
+
+  if (year && !month) {
+    news = await getNewsForYear(year);
+  } else if (year && month) {
+    news = await getNewsForYearAndMonth(year, month);
+  }
+
+  let newsContent = <p>No news found for the selected year.</p>;
+
+  if (news && news.length > 0) {
+    newsContent = <NewsList news={news} />;
+  }
+
+  return newsContent;
+}
 
 export default async function filteredNewsPage({ params }) {
   const filter = params.filter;
@@ -14,25 +33,23 @@ export default async function filteredNewsPage({ params }) {
   const selectedYear = filter?.[0];
   const selectedMonth = filter?.[1];
 
-  let news;
-  let links = getAvailableNewsYears();
+  let availableYears = getAvailableNewsYears();
+  let links = availableYears;
 
   if (selectedYear && !selectedMonth) {
-    news = await getNewsForYear(selectedYear);
     links = getAvailableNewsMonths(selectedYear);
   }
 
   if (selectedYear && selectedMonth) {
-    news = await getNewsForYearAndMonth(selectedYear, selectedMonth);
     links = [];
   }
 
   if (
-    (selectedYear && !getAvailableNewsYears().includes(selectedYear)) ||
+    (selectedYear && !availableYears.includes(selectedYear)) ||
     (selectedMonth &&
       !getAvailableNewsMonths(selectedYear).includes(selectedMonth))
   ) {
-    throw new Error('Invalid path');
+    throw new Error("Invalid path");
   }
 
   return (
@@ -55,11 +72,10 @@ export default async function filteredNewsPage({ params }) {
           </ul>
         </nav>
       </header>
-      {news && news.length > 0 ? (
-        <NewsList news={news} />
-      ) : (
-        <p>No news found for the selected year.</p>
-      )}
+
+      <Suspense fallback={<p>Loading news...</p>}>
+        <FilteredNews year={selectedYear} month={selectedMonth} />
+      </Suspense>
     </>
   );
 }
